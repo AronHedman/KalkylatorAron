@@ -4,6 +4,9 @@
  * önskar lösa problemen med andra metoder.
  */
 
+/**
+ * ? representerar negativa tal**/
+
 let lcd = null; // displayen
 
 let memory = 0; // Lagrat/gamlat värdet från display
@@ -69,10 +72,19 @@ function showMem() {
  */
 
 //Array handler
-index = 0;
+
 function addToArray(f) {
-    value[index] = f;
-    index += 1;
+
+    if(f == "0" && value.length == 0){
+        return;
+    }
+    if(f == "-" && (value.at(-1) == "-" || value.at(-1) == "+" || value.at(-1) == "*" || value.at(-1) == "/" || value.at(-1) == undefined)){
+        f = "?";
+    }
+    if(f == "," && value.at(-1) == "," || f == "+" && value.at(-1) == "+" || f == "-" && value.at(-1) == "-" || f == "*" && value.at(-1) == "*" || f == "/" && value.at(-1) == "/"){
+        return;
+    }
+    value.push(f);
 
     console.log(value);
     lcd.value = value.join('');
@@ -121,21 +133,6 @@ function calculate() {
     let result;
 
 
-
-    // switch (arithmetic) {
-    //     case '+':
-
-    //         break;
-    //     case '-':
-
-    //         break;
-    //     case '*':
-
-    //         break;
-    //     case '/':
-
-    //         break;
-    // }
 }
 
 /** Rensar display */
