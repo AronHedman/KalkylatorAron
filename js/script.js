@@ -11,10 +11,14 @@ let arithmetic = null; // Vilken beräkning som skall göras +,-, x eller /
 
 function init() {
     lcd = document.getElementById('lcd');
-    memoryDisplay = document.getElementById('memoryDisplay'); 
+    memoryDisplay = document.getElementById('memoryDisplay');
     let keyBoard = document.getElementById('keyBoard')
     keyBoard.onclick = buttonClick;
 }
+
+ //displaytext
+ let displayText = null;
+ let value = [];
 
 /**
  * Händelsehanterare för kalkylatorns tangentbord
@@ -33,101 +37,115 @@ function buttonClick(e) {
         }
         switch (btn) {
             case 'add':
-
+                addPlus();
                 break;
             case 'sub':
-
+                addMinus();
                 break;
             case 'mul':
-
+                addMul();
                 break;
             case 'div':
-
+                addDiv();
                 break;
             case 'clear':
-
+                clearLCD();
                 break;
             case 'enter':
-
+                calculate();
                 break;
             case 'comma':
-
+                addComma();
                 break;
         }
     }
 }
 
-function showMem () {
+function showMem() {
     document.getElementById('memoryDisplay').value = memory + (arithmetic ? arithmetic : '');
 }
-    /**
-     *  Lägger till siffra på display.
-     */
-    function addDigit(digit) {
+/**
+ *  Lägger till siffra på display.
+ */
 
-    }
+//Array handler
+index = 0;
+function addToArray(f) {
+    value[index] = f;
+    index += 1;
 
-    /**
-     * Lägger till decimaltecken
-     */
-    function addComma() {
+    console.log(value);
+    lcd.value = value.join('');
+}
 
-    }
+function addDigit(digit) {
+    addToArray(digit);
+}
 
-    function addPlus() {
+/**
+ * Lägger till decimaltecken
+ */
+function addComma() {
+    addToArray(",");
+}
 
-    }
+function addPlus() {
+    addToArray("+");
+}
 
-    function addMinus() {
+function addMinus() {
+    addToArray("-");
+}
 
-    }
+function addDiv() {
+    addToArray("/");
+}
 
-    function addDiv() {
+function addMul() {
+    addToArray("*");
+}
 
-    }
+/**
+ * Sparar operator.
+ * +, -, *, /
+ */
+function setOperator(operator) {
 
-    function addMul() {
+}
 
-    }
 
-    /**
-     * Sparar operator.
-     * +, -, *, /
-     */
-    function setOperator(operator) {
+/**
+ * Beräknar och visar resultatet på displayen.
+ */
+function calculate() {
+    let result;
 
-    }
-    
 
-    /**
-     * Beräknar och visar resultatet på displayen.
-     */
-    function calculate() {
-        let result;
-        switch (arithmetic) {
-            case '+':
 
-                break;
-            case '-':
+    // switch (arithmetic) {
+    //     case '+':
 
-                break;
-            case '*':
+    //         break;
+    //     case '-':
 
-                break;
-            case '/':
+    //         break;
+    //     case '*':
 
-                break;
-        }
-    }
+    //         break;
+    //     case '/':
 
-    /** Rensar display */
-    function clearLCD() {
+    //         break;
+    // }
+}
 
-    }
+/** Rensar display */
+function clearLCD() {
 
-    /** Rensar allt, reset */
-    function memClear() {
+}
 
-    }
+/** Rensar allt, reset */
+function memClear() {
 
-    window.onload = init;
+}
+
+window.onload = init;
