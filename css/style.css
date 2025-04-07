@@ -1,1 +1,35 @@
 
+
+main {
+    font-family: Arial, sans-serif;
+    background-color: black;
+    max-width: 300px;
+    overflow: hidden;
+    margin: auto;
+}
+
+#lcd {
+    width: 100%;
+    padding: 20px;
+    text-align: right;
+}
+
+#keyBoard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    padding: 25px;
+}
+
+button {
+    height: 60px;
+    border-radius: 5px;
+    font-size: 40px;
+    color: black;
+    background-color: rgb(224, 224, 224);
+    cursor: pointer;
+}
+
+#clear{ 
+    width: 100%;
+}
