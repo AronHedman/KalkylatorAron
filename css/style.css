@@ -30,6 +30,14 @@ button {
     cursor: pointer;
 }
 
+#add, #sub, #mul, #div, #comma, #enter, #clear{
+    color: rgb(72, 209, 255);
+}
+
 #clear{ 
     width: 100%;
+}
+
+button:hover{
+    background-color: rgb(198, 198, 198);
 }
