@@ -4,6 +4,8 @@
  * önskar lösa problemen med andra metoder.
  */
 
+
+
 /**
  * ? representerar negativa tal**/
 

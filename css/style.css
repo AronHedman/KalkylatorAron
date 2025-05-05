@@ -1,33 +1,65 @@
+@import url('https://fonts.cdnfonts.com/css/lcd');
 
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    color: black;
+    margin: 0px;
+    padding: 0px;
+}
+
+html {
+    font-size: 4vh; /*Redeclare size of REM*/
+}
+
+/* @font-face {
+    font-family: lcd;
+    src: url(../font/SUBWT___.ttf);
+} */
+
+body {
+    width: 100%;
+    height: 100vh;
+}
 
 main {
-    font-family: Arial, sans-serif;
     background-color: black;
-    max-width: 300px;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    margin: auto;
 }
 
 #lcd {
+    font-family: 'LCD', sans-serif;
+    font-size: 100%;
+
     width: 100%;
+    height: 40%;
     padding: 20px;
     text-align: right;
 }
 
 #keyBoard {
+    height: 60%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
+    grid-template-rows: repeat(5, 1fr);
+    gap: 4%;
     padding: 25px;
 }
 
 button {
-    height: 60px;
-    border-radius: 5px;
-    font-size: 40px;
+    height: 100%;
+    width: 100%;
+    border-radius: 20%;
+    font-size: 1rem;
     color: black;
     background-color: rgb(224, 224, 224);
     cursor: pointer;
+}
+
+#clear {
+    border-radius: 2vh;
 }
 
 #add, #sub, #mul, #div, #comma, #enter, #clear{
