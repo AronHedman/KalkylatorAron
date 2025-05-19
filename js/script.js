@@ -21,9 +21,16 @@ function init() {
     keyBoard.onclick = buttonClick;
 }
 
- //displaytext
- let displayText = null;
- let value = [];
+//displaytext
+let displayText = null;
+let inputArray = [];
+
+
+//Lite variabler
+let isComma = false;
+let isNum = false;
+let isOperator = false; //Inkluderar komma
+let isNegative = false;
 
 /**
  * Händelsehanterare för kalkylatorns tangentbord
@@ -35,23 +42,57 @@ function buttonClick(e) {
     // kollar om siffertangent är nedtryckt
     if (btn.substring(0, 1) === 'b') {
         let digit = btn.substring(1, 2); // plockar ut siffran från id:et
-        addDigit(digit);
-    } else {
-        if (arithmetic && btn != "comma") { // Kontrollerar om en operation är vald och det finns ett värde att beräkna
-            calculate(); // Utför pågående beräkning
+        addToArray(digit);
+        isNum = true;
+        isOperator = false;
+    } else if (btn == 'comma') {
+        if (!isComma) {
+            if (isOperator) {
+                addToArray("0")
+                addToArray(".")
+            } else {
+                addToArray(".");
+            }
+
+            isComma = true;
+            isNum = false;
+            isOperator = true;
         }
+    } else if (btn == 'minus' && inputArray.at(-1) == "-") {
+        addToArray("?");
+    } else {
         switch (btn) {
             case 'add':
-                addPlus();
+                if (!isOperator) {
+                    addToArray("+");
+                    isComma = false;
+                    isNum = false;
+                    isOperator = true;
+                }
                 break;
             case 'sub':
-                addMinus();
+                if (!isOperator) {
+                    addToArray("-");
+                    isComma = false;
+                    isNum = false;
+                    isOperator = true;
+                }
                 break;
             case 'mul':
-                addMul();
+                if (!isOperator) {
+                    addToArray("*");
+                    isComma = false;
+                    isNum = false;
+                    isOperator = true;
+                }
                 break;
             case 'div':
-                addDiv();
+                if (!isOperator) {
+                    addToArray("/");
+                    isComma = false;
+                    isNum = false;
+                    isOperator = true;
+                }
                 break;
             case 'clear':
                 clearLCD();
@@ -59,92 +100,102 @@ function buttonClick(e) {
             case 'enter':
                 calculate();
                 break;
-            case 'comma':
-                addComma();
-                break;
         }
     }
 }
 
-function showMem() {
-    document.getElementById('memoryDisplay').value = memory + (arithmetic ? arithmetic : '');
-}
-/**
- *  Lägger till siffra på display.
- */
-
 //Array handler
-
 function addToArray(f) {
-
-    if(f == "0" && value.length == 0){
+    if (f == "." && isComma) {
         return;
     }
-    if(f == "-" && (value.at(-1) == "-" || value.at(-1) == "+" || value.at(-1) == "*" || value.at(-1) == "/" || value.at(-1) == undefined)){
-        f = "?";
-    }
-    if(f == "," && value.at(-1) == "," || f == "+" && value.at(-1) == "+" || f == "-" && value.at(-1) == "-" || f == "*" && value.at(-1) == "*" || f == "/" && value.at(-1) == "/"){
-        return;
-    }
-    value.push(f);
 
-    console.log(value);
-    lcd.value = value.join('');
-}
+    inputArray.push(f);
 
-function addDigit(digit) {
-    addToArray(digit);
-}
+    console.log(inputArray);
+    lcd.value = inputArray.join('');
 
-/**
- * Lägger till decimaltecken
- */
-function addComma() {
-    addToArray(",");
-}
-
-function addPlus() {
-    addToArray("+");
-}
-
-function addMinus() {
-    addToArray("-");
-}
-
-function addDiv() {
-    addToArray("/");
-}
-
-function addMul() {
-    addToArray("*");
-}
-
-/**
- * Sparar operator.
- * +, -, *, /
- */
-function setOperator(operator) {
-
-}
-
-
-/**
- * Beräknar och visar resultatet på displayen.
- */
-function calculate() {
-    let result;
-
-
+    //Autoscrollar ifall inputtexten overflowar
+    lcd.scrollLeft = lcd.scrollWidth;
 }
 
 /** Rensar display */
 function clearLCD() {
 
+    inputArray = [0];
+
+    console.log(inputArray);
+    lcd.value = inputArray.join('');
+
+    inputArray = [];
 }
 
-/** Rensar allt, reset */
-function memClear() {
+function calculate() {
 
+    let numbers = [];
+    let operators = [];
+    let calculated = null;
+
+    let currentNum = [];
+
+    for (let i = 0; i < inputArray.length; i++) {
+        if (inputArray[i] == "*" || inputArray[i] == "/" || inputArray[i] == "-" || inputArray[i] == "+") {
+            operators.push(inputArray[i]);
+            if (currentNum !== 0) {
+                numbers.push(parseFloat(currentNum.join('')));
+                currentNum = [];
+            }
+        } else {
+            currentNum.push(inputArray[i]);
+
+        }
+        console.log(inputArray[i]);
+    }
+    numbers.push(parseFloat(currentNum.join(''))); //Lägger till det sista numret i arrayen
+
+    if (operators === 0) {
+        lcd.value = inputArray.join('');
+        inputArray = [];
+        return;
+    } else {
+
+        for (let i = 0; i < operators.length; i++) {
+
+            if (operators[i] == "+") {
+                if (calculated == null) {
+                    calculated = numbers[i] + numbers[i + 1];
+                } else {
+                    calculated = calculated + numbers[i + 1];
+                }
+            }
+            else if (operators[i] == "-") {
+                if (calculated == null) {
+                    calculated = numbers[i] - numbers[i + 1];
+                } else {
+                    calculated = calculated - numbers[i + 1];
+                }
+            }
+            else if (operators[i] == "*") {
+                if (calculated == null) {
+                    calculated = numbers[i] * numbers[i + 1];
+                } else {
+                    calculated = calculated * numbers[i + 1];
+                }
+            }
+            else if (operators[i] == "/") {
+                if (calculated == null) {
+                    calculated = numbers[i] / numbers[i + 1];
+                } else {
+                    calculated = calculated / numbers[i + 1];
+                }
+            }
+        }
+        lcd.value = calculated;
+        inputArray = [];
+    }
+    console.log("CurrentNum: " + currentNum);
+    console.log("numbers: " + numbers);
+    console.log("operators: " + operators);
+    console.log("Calculated: " + calculated);
 }
-
 window.onload = init;
